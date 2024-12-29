@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=william
+Path=/usr/lib/william
+Exec=/usr/lib/william/william
+Icon=/usr/share/icons/william.png
+Terminal=false
+Type=Application
+Categories=Application
+Name[en_US]=william

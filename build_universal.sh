@@ -2,16 +2,16 @@
 
 cd "$(dirname "$0")" || exit
 
-if [ -d "./althea/usr/lib" ]; then
+if [ -d "./william/usr/lib" ]; then
     rm -rf "./AltServer/usr/lib"
 fi
 if [ -d "./dist" ]; then
     rm -rf "./dist"
 fi
 
-pyinstaller althea.spec --clean
-cp -R ./resources ./dist/althea
-mkdir -p "./althea/usr/lib"
+pyinstaller william.spec --clean
+cp -R ./resources ./dist/william
+mkdir -p "./william/usr/lib"
 
-cp -R ./dist/althea ./althea/usr/lib
-chmod -R 0775 althea
+cp -R ./dist/william ./william/usr/lib
+chmod -R 0775 william

@@ -1,9 +1,9 @@
-Package: althea
-Name: althea
-Version: 0.5.0
+Package: william
+Name: william
+Version: 12.4.1
 Architecture: amd64
-Author: vyvir <the.uniformed630@aleeas.com>
-Maintainer: vyvir <the.uniformed630@aleeas.com>
-Description: GUI for AltServerLinux
-Homepage: https://github.com/vyvir/althea
+Author: enokseth <enok._.seth@icloud.com>
+Maintainer: enokseth <enok._.seth@icloud.com>
+Description: GUI AltServerLinux with new EU features 
+Homepage: https://github.com/enokseth/william
 Depends: binutils, python3 (>= 3.8), gir1.2-appindicator3-0.1, usbmuxd, libimobiledevice6, libimobiledevice-utils, libavahi-compat-libdnssd-dev, unzip, usbutils, libhandy-1-0, libhandy-1-dev, curl, python3-requests, gir1.2-notify-0.7, psmisc

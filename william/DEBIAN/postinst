@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -ex
+
+william_PATH="/usr/lib/william"
+USER=$SUDO_USER
+
+if [ -d "$william_PATH" ]; then
+    sudo chown -R "$USER:$USER" "$william_PATH"
+fi
+exit 0

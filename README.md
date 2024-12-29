@@ -1,79 +1,92 @@
-# althea
-<img src="https://github.com/vyvir/althea/blob/main/resources/4.png" alt="althea Logo">
+# William: AltServer Linux for European Developers
 
-althea is a GUI for AltServer-Linux that allows to easily sideload apps onto an iPhone, an iPad, or an iPod Touch. It supports iOS 15 and later. althea supports x86_64, aarch64, and armv7.
+**William** is a powerful, Linux-based alternative to AltServer tailored for European developers. Designed with compliance to new European regulations for Apple, William simplifies the management of iOS app installation, provisioning, and development for open ecosystems.
 
-This app is in a very early state, so if you're experiencing issues or want to help, you can create a [pull request](https://github.com/vyvir/althea/pulls), [report an issue](https://github.com/vyvir/althea/issues), or join [the Discord server](https://discord.gg/DZwRbyXq5Z).
+---
 
-## Instructions
+## 🚀 Features
 
-### Dependencies
+### Core Features
+- **AltServer Replacement**: Full-featured alternative to AltServer for Linux users.
+- **IPA Signing and Installation**: Seamlessly sign and install `.ipa` files using your Apple Developer credentials.
+- **Provisioning Profile Management**: Auto-generate mobileconfig files for OTA (Over-The-Air) installation.
+- **Device Pairing**: Effortlessly pair iOS devices for debugging and development.
 
-Ubuntu:
-```
-sudo apt install software-properties-common
-```
+### Developer-Centric Features
+- **Multi-Device Support**: Manage multiple devices simultaneously.
+- **Dynamic Certificate Signing**: Automates certificate signing via OpenSSL for advanced workflows.
+- **GUI Integration**: Beautiful GTK-based GUI for managing your development needs.
+- **Server API**: RESTful API for integrating William into your CI/CD pipelines.
+- **European Compliance**: Fully adheres to the latest European legislation for open ecosystems, supporting sideloading and alternative app stores.
 
-```
-sudo add-apt-repository universe -y
-```
+### European Regulations Ready
+- **No Restrictions**: William supports installing any application without requiring App Store validation.
+- **Secure Anisette Server**: Hosted anisette server ensures your Apple ID login complies with new privacy standards.
+- **Localization**: Multilingual support for European languages, including French, German, and Italian.
 
-```
-sudo apt-get install binutils python3-pip python3-requests python3-keyring git gir1.2-appindicator3-0.1 usbmuxd libimobiledevice6 libimobiledevice-utils wget curl libavahi-compat-libdnssd-dev zlib1g-dev unzip usbutils libhandy-1-dev gir1.2-notify-0.7 psmisc
-```
+---
 
-Fedora:
-```
-sudo dnf install binutils python3-pip python3-requests python3-keyring git libappindicator-gtk3 usbmuxd libimobiledevice-devel libimobiledevice-utils wget curl avahi-compat-libdns_sd-devel dnf-plugins-core unzip usbutils psmisc
-```
-Arch Linux:
-```
-sudo pacman -S binutils wget curl git python-pip python-requests python-gobject python-keyring libappindicator-gtk3 usbmuxd libimobiledevice avahi zlib unzip usbutils psmisc libhandy
-```
+## 🛠️ Installation
 
-OpenSUSE:
-```
-sudo zypper in binutils wget curl git python311-pip python311-requests python311-keyring python311-gobject-Gdk libhandy-devel libappindicator3-1 typelib-1_0-AppIndicator3-0_1 imobiledevice-tools libdns_sd libnotify-devel psmisc
-```
+### Prerequisites
+- **Linux Distribution**: Works best on Ubuntu 20.04+ or Debian-based systems.
+- **Dependencies**:
+  - Python 3.8+
+  - GTK 3+
+  - OpenSSL
+  - Flask
+  - `ideviceinstaller`, `libimobiledevice`
 
-### Running althea
+### Step-by-Step Guide
 
-Once the dependencies are installed, run the following commands:
-```
-git clone https://github.com/vyvir/althea
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/william.git
+   cd william
 
-```
-cd althea
-```
+2. **Install required dependencies**:
 
-```
-python3 main.py
-```
-
-Note: if you're running OpenSUSE Leap, run the following command instead:
-```
-python3.11 main.py
+```bash
+sudo apt update
+sudo apt install python3 python3-pip libimobiledevice-utils gtk+3.0 openssl
+pip3 install -r requirements.txt
 ```
 
-That's it! Have fun with althea!
+3. **Generate signing keys**:
 
-## FAQ
+```bash
+openssl genrsa -out certs/private_key.pem 2048
+openssl req -new -x509 -key certs/private_key.pem -out certs/apple_cert.pem -days 365
+```
 
-<b>Fedora 41 shows the following error:</b>
+4. **Configure the project**:
 
-`ERROR: Device returned unhandled error code -5`
+ - Edit the `config.json` file with your Apple Developer details:
 
-You can downgrade crypto policies to the previous Fedora version:
+    ```bash
+    {
+    "app_name": "William",
+    "bundle_id": "com.example.william",
+    "app_version": "1.0",
+    "server_url": "https://yourserver.com",
+    "signing_key": "certs/private_key.pem",
+    "developer_identity": "certs/apple_cert.pem"
+    }
+    ```
+5. **Start the GUI or Flask server**:
 
-`sudo update-crypto-policies --set FEDORA40`
+`python3 william.py`
 
-## Credits
+# 💡 Usage
+## GUI Mode 
+- Launch the GTK-based GUI by running the main application.
+- Use the GUI to:
+    - Pair devices.
+    - Sign and install `.ipa` files.
+    - Generate mobileconfig files for OTA distribution.
 
-althea made by [vyvir](https://github.com/vyvir)
-
-AltServer-Linux made by [NyaMisty](https://github.com/NyaMisty)
-
-Provision by [Dadoum](https://github.com/Dadoum)
-
-Artwork by [Nebula](https://github.com/itsnebulalol)
+## API Mode
+- Access the server at `http://127.0.0.1:5000`.
+- Use the API endpoints to automate tasks:
+    - Upload IPA: `/upload_ipa` (POST)
+    - Download Files: `/ipa`, `/mobileconfig`, `/manifest.plist`

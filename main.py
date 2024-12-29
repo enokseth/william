@@ -450,7 +450,7 @@ class SplashScreen(Handy.Window):
                 shell=True,
             )
             silent_remove(f"{(williampath)}/am.apk")
-            self.loadalthea.set_fraction(0.4)
+            self.loadwilliam.set_fraction(0.4)
         self.lbl1.set_text("Starting anisette-server...")
         subprocess.run(f"{(williampath)}/anisette-server -n 127.0.0.1 -p 6969 &", shell=True)
         #subprocess.run(f"cd {(williampath)} && ./anisette-server &", shell=True)#-n 127.0.0.1 -p 6969 &", shell=True

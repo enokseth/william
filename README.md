@@ -41,7 +41,7 @@
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/william.git
+   git clone https://github.com/enokseth/william.git
    cd william
 
 2. **Install required dependencies**:

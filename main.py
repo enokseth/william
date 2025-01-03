@@ -6,6 +6,7 @@ import json
 import urllib.request
 from urllib.request import urlopen
 import urllib.parse
+from bs4 import BeautifulSoup
 import requests
 import subprocess
 import signal
@@ -102,6 +103,8 @@ def menu():
         ("About William", on_abtdlg),
         ("Settings", lambda x: openwindow(SettingsWindow)),
         ("Install AltStore", altstoreinstall),
+        ("Install SideStore", sidestoreinstall),
+        # ("Start SideJITServer", startsidejitserver),
         ("Install an IPA file", altserverfile),
         ("Pair", lambda x: openwindow(PairWindow)),
         ("Restart AltServer", restart_altserver),
@@ -155,7 +158,7 @@ def on_abtdlg(self):
     about.set_comments("A GUI for AltServer-Linux written in Python with EU features.")
     about.set_website("https://github.com/enokseth/william")
     about.set_website_label("Github")
-    about.set_copyright("GUI by vyvir affined by EnokSeth")
+    about.set_copyright("GUI by vyvir affined by EnokSeth with Cross Platforms / IOS Side JIT`")
     about.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
     about.run()
     about.destroy()
@@ -172,6 +175,20 @@ def altstoreinstall(_):
         openwindow(PairWindow)
     else:
         win1()
+
+def sidestoreinstall(_):
+    if paircheck():
+        openwindow(PairWindow)
+    else:
+        global PATH
+        PATH = f"{(williampath)}/SideStore.ipa"
+        if not os.path.isfile(PATH):  # Télécharge si le fichier IPA est manquant
+            if not sidestore_download("Download"):
+                print("Erreur : Impossible de télécharger le fichier IPA de SideStore.")
+                return
+        win1()  # Lancer le processus d'installation
+
+
 
 def altserverfile(_):
     if paircheck():
@@ -329,6 +346,77 @@ def altstore_download(value):
         return True
     else:
         return False
+
+def sidestore_download(value):
+    sidestore_base_url = "https://api.github.com/repos/SideStore/SideStore/releases/latest"
+
+    try:
+        response = requests.get(sidestore_base_url)
+        response.raise_for_status()
+        release_data = response.json()
+
+        # Trouver le fichier IPA dans les assets
+        ipa_asset = next(
+            (asset for asset in release_data.get('assets', []) if asset['name'].endswith('.ipa')),
+            None
+        )
+
+        if not ipa_asset:
+            print("Erreur : Aucun fichier IPA trouvé dans les releases SideStore.")
+            return False
+
+        download_url = ipa_asset['browser_download_url']
+        filename = ipa_asset['name']
+        filepath = f"{(williampath)}/{filename}"
+
+        if value == "Check":
+            # Vérifie si la taille du fichier correspond
+            response = requests.head(download_url)
+            response.raise_for_status()
+            remote_size = int(response.headers.get('Content-Length', 0))
+            return remote_size == os.path.getsize(filepath)
+
+        if value == "Download":
+            print(f"Téléchargement de SideStore depuis : {download_url}")
+            r = requests.get(download_url, allow_redirects=True)
+            r.raise_for_status()
+
+            with open(filepath, "wb") as file:
+                file.write(r.content)
+
+            os.rename(filepath, f"{(williampath)}/SideStore.ipa")
+            subprocess.run(f"chmod 755 {(williampath)}/SideStore.ipa", shell=True)
+            print("SideStore téléchargé et prêt à être installé.")
+            return True
+
+        print("Valeur non valide. Utilisez 'Check' ou 'Download'.")
+        return False
+
+    except requests.RequestException as e:
+        print(f"Erreur lors de la requête HTTP : {e}")
+        return False
+    except Exception as e:
+        print(f"Erreur inattendue : {e}")
+        return False
+
+def generate_sidestore_pairing_file(output_path):
+    try:
+        # Vérifiez si l'appareil est déjà pairé
+        pair_command = "idevicepair validate | grep -q 'SUCCESS'"
+        pair_status = subprocess.run(pair_command, shell=True)
+        
+        if pair_status.returncode != 0:
+            print("L'appareil n'est pas encore pairé. Démarrage du pairage...")
+            subprocess.run(["idevicepair pair"], shell=True, check=True)
+        
+        # Sauvegarder le fichier de pairage
+        pairing_file = os.path.join(output_path, "pairing_record.plist")
+        subprocess.run(f"idevicepair pair > {pairing_file}", shell=True, check=True)
+        print(f"Fichier de pairage généré : {pairing_file}")
+        return pairing_file
+    except subprocess.CalledProcessError as e:
+        print(f"Erreur lors de la génération du fichier de pairage : {e}")
+        return None
 
 def ios_version():
     silent_remove(f"{(williampath)}/ideviceinfo.txt")

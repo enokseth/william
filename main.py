@@ -65,10 +65,22 @@ password = "lol"
 Warnmsg = "warn"
 Failmsg = "fail"
 icon_name = "changes-prevent-symbolic"
+
 command_six = Gtk.CheckMenuItem(label="Launch at Login")
+
+## Server .+=. 
+
 AltServer = "$HOME/.local/share/william/AltServer"
+# SideServer = "$HOME/.local/share/william/SideServer"
+
+# Anisette Server
+
 AnisetteServer = "$HOME/.local/share/william/anisette-server"
+
+# IPA PLAIN PATH
 AltStore = "$HOME/.local/share/william/AltStore.ipa"
+AltStore = "$HOME/.local/share/william/SideStore.ipa"
+
 PATH = AltStore
 AutoStart = resource_path("resources/AutoStart.sh")
 williampath = os.path.join(
@@ -102,12 +114,20 @@ def menu():
     commands = [
         ("About William", on_abtdlg),
         ("Settings", lambda x: openwindow(SettingsWindow)),
+
         ("Install AltStore", altstoreinstall),
         ("Install SideStore", sidestoreinstall),
-        # ("Start SideJITServer", startsidejitserver),
+
+        # ("Start SideJITServer", startsidejitserver), to do implemente same as combined fucntion action start sidestore
+
         ("Install an IPA file", altserverfile),
+
         ("Pair", lambda x: openwindow(PairWindow)),
+
         ("Restart AltServer", restart_altserver),
+
+        # ("Restart SideServer", restart_altserver),
+        # ("ReStart SideJITServer", startsidejitserver),
         ("Quit William", lambda x: quitit())
     ]
 
@@ -348,7 +368,7 @@ def altstore_download(value):
         return False
 
 def sidestore_download(value):
-    sidestore_base_url = "https://api.github.com/repos/SideStore/SideStore/releases/latest"
+    sidestore_base_url = "https://api.github.com/repos/SideStore/SideStore/releases?q=stable"
 
     try:
         response = requests.get(sidestore_base_url)
@@ -510,7 +530,7 @@ class SplashScreen(Handy.Window):
         subprocess.run(f"chmod +x {(williampath)}/{name}", shell=True)
         subprocess.run(f"chmod 755 {(williampath)}/{name}", shell=True)
 
-    
+    # DOWLOAD ANISETTE SERVER 
     def startup_process(self):
         self.lbl1.set_text("Checking if anisette-server is already running...")
         self.loadwilliam.set_fraction(0.1)

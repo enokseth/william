@@ -7,6 +7,7 @@
 ## 🚀 Features
 
 ### Core Features
+
 - **AltServer Replacement**: Full-featured alternative to AltServer for Linux users.
 - **IPA Signing and Installation**: Seamlessly sign and install `.ipa` files using your Apple Developer credentials.
 - **Provisioning Profile Management**: Auto-generate mobileconfig files for OTA (Over-The-Air) installation.
@@ -24,13 +25,14 @@
 - **No Restrictions**: William supports installing any application without requiring App Store validation.
 - **Secure Anisette Server**: Hosted anisette server ensures your Apple ID login complies with new privacy standards.
 - **Localization**: Multilingual support for European languages, including French, German, and Italian.
-
 ---
 
 ## 🛠️ Installation
 
 ### Prerequisites
+
 - **Linux Distribution**: Works best on Ubuntu 20.04+ or Debian-based systems.
+
 - **Dependencies**:
   - Python 3.8+
   - GTK 3+
@@ -60,6 +62,7 @@ openssl genrsa -out certs/private_key.pem 2048
 openssl req -new -x509 -key certs/private_key.pem -out certs/apple_cert.pem -days 365
 ```
 
+### THIS SECTION IS NOT IMPLEMENTED YET 
 4. **Configure the project**:
 
  - Edit the `config.json` file with your Apple Developer details:

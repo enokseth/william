@@ -11,6 +11,7 @@
 - **IPA Signing and Installation**: Seamlessly sign and install `.ipa` files using your Apple Developer credentials.
 - **Provisioning Profile Management**: Auto-generate mobileconfig files for OTA (Over-The-Air) installation.
 - **Device Pairing**: Effortlessly pair iOS devices for debugging and development.
+- **SideJITServer**: Any automatical enabled version compatible all ios SideJITServer and SideStore.
 
 ### Developer-Centric Features
 - **Multi-Device Support**: Manage multiple devices simultaneously.
